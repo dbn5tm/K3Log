@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="K3Log.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SQLiteFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\\Users\\n5tm\\Documents\N5TM_DB\N5TM_Full_NextGen.SQLite</Value>
+    </Setting>
+    <Setting Name="Rig" Type="System.String" Scope="User">
+      <Value Profile="(Default)">K3</Value>
+    </Setting>
+    <Setting Name="MyCall" Type="System.String" Scope="User">
+      <Value Profile="(Default)">N5TM</Value>
+    </Setting>
+    <Setting Name="MyGrid" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EL29ds</Value>
+    </Setting>
+    <Setting Name="Port" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Com2</Value>
+    </Setting>
+    <Setting Name="Baud" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">38400</Value>
+    </Setting>
+    <Setting Name="Rig2" Type="System.String" Scope="User">
+      <Value Profile="(Default)">None</Value>
+    </Setting>
+    <Setting Name="SMSNumber" Type="System.String" Scope="User">
+      <Value Profile="(Default)">7133986432@tmomail.net</Value>
+    </Setting>
+    <Setting Name="NoCallGrids" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EL29;EM20</Value>
+    </Setting>
+    <Setting Name="CountryList" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\\Users\\n5tm\\Documents\\N5TM_DB\\country.xml</Value>
+    </Setting>
+    <Setting Name="BandPlan" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\\Users\\n5tm\\Documents\\N5TM_DB\\bandplan_r2.xml</Value>
+    </Setting>
+    <Setting Name="QRZLogin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">n5tm</Value>
+    </Setting>
+    <Setting Name="QRZPwd" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dange123</Value>
+    </Setting>
+    <Setting Name="WorkedGridColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 128, 0</Value>
+    </Setting>
+    <Setting Name="InitalSpotColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">0, 192, 0</Value>
+    </Setting>
+    <Setting Name="BoundaryColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
+    <Setting Name="WorkedSpotColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Blue</Value>
+    </Setting>
+    <Setting Name="NewGridColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="LowerLeftGrid" Type="System.String" Scope="User">
+      <Value Profile="(Default)">CL59</Value>
+    </Setting>
+    <Setting Name="UpperRightGrid" Type="System.String" Scope="User">
+      <Value Profile="(Default)">FN95</Value>
+    </Setting>
+    <Setting Name="MyName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Dan</Value>
+    </Setting>
+    <Setting Name="WKeyer" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="WKSidetone" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WKSToneFreq" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="WKRevPdl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WKPdlMode" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="WKComport" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM5</Value>
+    </Setting>
+    <Setting Name="WKCTSpace" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WKAutoSpace" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MyCnty" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Harris</Value>
+    </Setting>
+    <Setting Name="MyContinent" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NA</Value>
+    </Setting>
+    <Setting Name="MyCQZone" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="MyITUZone" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">7</Value>
+    </Setting>
+    <Setting Name="MyDXCC" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">291</Value>
+    </Setting>
+    <Setting Name="Satellites" Type="K3Log.SatelliteCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="BandPower" Type="K3Log.BandPowerCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="VirtualPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM15</Value>
+    </Setting>
+    <Setting Name="VirtualBaud" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">38400</Value>
+    </Setting>
+    <Setting Name="WKOutport" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LoTW" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Alt1Port" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM14</Value>
+    </Setting>
+    <Setting Name="Alt2Port" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM19</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
