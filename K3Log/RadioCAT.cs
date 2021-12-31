@@ -94,6 +94,8 @@ namespace K3Log
             cmdtimer.Elapsed += new System.Timers.ElapsedEventHandler(timerTick);
             cmdtimer.Enabled = false;
             enableDoppler = false;
+            
+            
         }
         
         ~RadioCAT()
@@ -110,6 +112,7 @@ namespace K3Log
             this.ClosePort();
             this.Dispose(true);
             GC.SuppressFinalize(this);
+            
         }
 
         /// <summary>
@@ -245,10 +248,11 @@ namespace K3Log
         {
             try
             {
-                //K3Com.Close();
+                
                 //K3Com.Dispose();
                 killthread = true;
                 cmdtimer.Enabled = false;
+                K3Com.Close();
                 //VirtCom.Close();
             }
             catch (Exception)
@@ -517,55 +521,64 @@ namespace K3Log
         }
         private void timerTick(object sender, EventArgs e)
         {
-            if (enableDoppler)
+            if (killthread)
             {
-                //Double elapsedMillisecs = ((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds;
-                //if (elapsedMillisecs > 300)
-                //{
-                DialFreq(Doppler, 1);
-                startTime = DateTime.Now;
-                //}
+                this.K3Com.Close();
+                cmdtimer.Stop();
             }
-
-
-            if (words.Count > 0)
+            else
             {
-                args.wordindex = words[0].index;
-
-                send("KY " + words[0].word + ";");
-                words.RemoveAt(0);
-
-                if (words.Count > 0)
+                if (enableDoppler)
                 {
-                    if (words[0].word.Contains("EOL"))
-                    {
-                        send("RX;");
-                    }
+                    //Double elapsedMillisecs = ((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds;
+                    //if (elapsedMillisecs > 300)
+                    //{
+                    DialFreq(Doppler, 1);
+                    startTime = DateTime.Now;
+                    //}
                 }
 
 
-            }
+                if (words.Count > 0)
+                {
+                    args.wordindex = words[0].index;
 
-            System.Timers.ElapsedEventArgs tick = (System.Timers.ElapsedEventArgs)e;
-            if(VsendBuf == "nil")
-            {
-                // send the next request to the k3
-                
-                send(sendStr[sendStrPointer] + ";");
-                sendStrPointer += 1;
-                if (sendStrPointer > 8) sendStrPointer = 0;
-                //send("TQ;BG;FA;FB;TB;MD;MD$;BN;BN$;");
-                args.VirtualCmd = "";
-            }
-            //else
-            //{
+                    send("KY " + words[0].word + ";");
+                    words.RemoveAt(0);
+
+                    if (words.Count > 0)
+                    {
+                        if (words[0].word.Contains("EOL"))
+                        {
+                            send("RX;");
+                        }
+                    }
+
+
+                }
+
+                System.Timers.ElapsedEventArgs tick = (System.Timers.ElapsedEventArgs)e;
+                if (VsendBuf == "nil")
+                {
+                    // send the next request to the k3
+
+                    send(sendStr[sendStrPointer] + ";");
+                    sendStrPointer += 1;
+                    if (sendStrPointer > 8) sendStrPointer = 0;
+                    //send("TQ;BG;FA;FB;TB;MD;MD$;BN;BN$;");
+                    args.VirtualCmd = "";
+                }
+                //else
+                //{
                 //args.VirtualCmd = VsendBuf;
                 //send(VsendBuf);
                 //VsendBuf = "";
                 //Thread.Sleep(500);
-            //}
-            
-            
+                //}
+            }
+
+
+
 
         }    
 

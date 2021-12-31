@@ -16,6 +16,7 @@ using System.Xml.Linq;
 using System.Reflection;
 
 
+
 namespace K3Log
 {
 
@@ -47,6 +48,7 @@ namespace K3Log
         private string myDB = "";
         TextBox thisRadioBox;
         TextBox thisRadioMode;
+        Thread backgroundK3;
         // This is the real dB, be careful
         String sqliteConn; //= "Data Source=" +
                            //"E:\\Documents\\N5TM_DB\\N5TM_Full_NextGen.SQLite;Version=3;";
@@ -225,7 +227,7 @@ namespace K3Log
             Application.ApplicationExit += new EventHandler(OnApplicationExit);
             
         }
-        
+                       
         void OnApplicationExit(object sender, EventArgs e)
         {
             // When the application is exiting, Close the comport and threads.
@@ -233,7 +235,13 @@ namespace K3Log
             try
             {
                 // Ignore any errors that might occur while closing the file handle.
-                K3.ClosePort();
+                //K3.ClosePort();
+                this.InvokeAndClose((MethodInvoker)delegate
+                {
+                    K3.ClosePort();
+                    K3 = null;
+                    Environment.Exit(Environment.ExitCode);
+                });
             }
             catch { }
         }
@@ -328,6 +336,7 @@ namespace K3Log
             
             if(rig == "K3")
             {
+                
                 string port = Properties.Settings.Default.Port;
                 int baud = Properties.Settings.Default.Baud;
                 K3 = new K3Log.RadioCAT(0, port, baud);
@@ -455,7 +464,16 @@ namespace K3Log
 
             return mlist;
         }
-
+        private void startK3()
+        {
+            string port = Properties.Settings.Default.Port;
+            int baud = Properties.Settings.Default.Baud;
+            
+            K3 = new K3Log.RadioCAT(0, port, baud);
+            K3.K3Rcvd += new EventHandler<K3Log.RadioCAT.DatarcvdEventArgs>(newK3Data);
+            
+            
+        }
         private List<String> GetWorked(String[] cols, String ret)
         {
             //SQLiteDB logbook = new SQLiteDB(sqliteConn);
@@ -1221,6 +1239,7 @@ namespace K3Log
 
                 this.InvokeAndClose((MethodInvoker)delegate
                 {
+                                         
                     VFOA_Radio1.Text = (e.FA * 1000).ToString("###.00");
                     VFOB_Radio1.Text = (e.FB * 1000).ToString("###.00");
                     // K3 decoced CW PSK or FSK
@@ -3383,7 +3402,12 @@ namespace K3Log
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(rig == "K3")  K3.Dispose();
+            this.InvokeAndClose((MethodInvoker)delegate
+            {
+                K3.ClosePort(); 
+                K3 = null;
+                Environment.Exit(Environment.ExitCode);
+            });
         }
 
         private void chkDopplerDown_CheckedChanged(object sender, EventArgs e)
@@ -3500,6 +3524,7 @@ namespace K3Log
                     charArray[i] = mask[i--];
             return new string(charArray);
         }
+        
     }
     public static class StringExt
     {

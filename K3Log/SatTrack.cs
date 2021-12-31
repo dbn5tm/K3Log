@@ -20,6 +20,7 @@ namespace K3Log
         private string[] tleargs = { "https://www.amsat.org/tle/current/nasabare.txt", "" };
         private List<TLEelement> SatTLEs = new List<TLEelement>();
         TLEelement thisSat = new TLEelement();
+        bool noTLE;
         public void timerEnable(bool enabled)
         {
             posTimer.Enabled = enabled;
@@ -34,8 +35,17 @@ namespace K3Log
         public void selectSatellite(string satName)
         {
             thisSat =  SatTLEs.Find(x => x.satname == satName);
-            posTimer.Enabled = true;
-            SatelliteTrack(thisSat);
+            if(thisSat != null)
+            {
+                posTimer.Enabled = true;
+                SatelliteTrack(thisSat);
+            }
+            else
+            {
+                args.satellite = "No TLE";
+            }
+            
+            
         }
 
         public event EventHandler<SatTrackEventArgs> SatTrackEvent;
