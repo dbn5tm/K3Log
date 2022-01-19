@@ -108,6 +108,15 @@
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.btnAddSatellite = new System.Windows.Forms.Button();
             this.SatellitesDataGridView = new System.Windows.Forms.DataGridView();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.btnAddBandPower = new System.Windows.Forms.Button();
+            this.BandPwrDataGridView = new System.Windows.Forms.DataGridView();
+            this.Band = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Power = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Antenna = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PropMode = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.btnClose = new System.Windows.Forms.Button();
+            this.btnApply = new System.Windows.Forms.Button();
             this.Satellite = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Uplink = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Downlink = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -118,15 +127,6 @@
             this.UpDoppler = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DownDoppler = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Invert = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.btnAddBandPower = new System.Windows.Forms.Button();
-            this.BandPwrDataGridView = new System.Windows.Forms.DataGridView();
-            this.Band = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Power = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Antenna = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PropMode = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.btnClose = new System.Windows.Forms.Button();
-            this.btnApply = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -922,66 +922,7 @@
             this.SatellitesDataGridView.Name = "SatellitesDataGridView";
             this.SatellitesDataGridView.Size = new System.Drawing.Size(703, 145);
             this.SatellitesDataGridView.TabIndex = 2;
-            // 
-            // Satellite
-            // 
-            this.Satellite.HeaderText = "Satellite";
-            this.Satellite.Name = "Satellite";
-            this.Satellite.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Uplink
-            // 
-            this.Uplink.HeaderText = "Uplink";
-            this.Uplink.Name = "Uplink";
-            // 
-            // Downlink
-            // 
-            this.Downlink.HeaderText = "Downlink";
-            this.Downlink.Name = "Downlink";
-            // 
-            // Mode
-            // 
-            this.Mode.HeaderText = "Mode";
-            this.Mode.Name = "Mode";
-            this.Mode.Width = 50;
-            // 
-            // UpMode
-            // 
-            this.UpMode.HeaderText = "Up Mode";
-            this.UpMode.Name = "UpMode";
-            this.UpMode.Width = 50;
-            // 
-            // DownMode
-            // 
-            this.DownMode.HeaderText = "Down Mode";
-            this.DownMode.Name = "DownMode";
-            this.DownMode.Width = 50;
-            // 
-            // PLTone
-            // 
-            this.PLTone.HeaderText = "PLTone";
-            this.PLTone.Name = "PLTone";
-            this.PLTone.Width = 50;
-            // 
-            // UpDoppler
-            // 
-            this.UpDoppler.HeaderText = "Up Doppler";
-            this.UpDoppler.Name = "UpDoppler";
-            this.UpDoppler.Width = 50;
-            // 
-            // DownDoppler
-            // 
-            this.DownDoppler.HeaderText = "Down Doppler";
-            this.DownDoppler.Name = "DownDoppler";
-            this.DownDoppler.Width = 50;
-            // 
-            // Invert
-            // 
-            this.Invert.HeaderText = "Invert";
-            this.Invert.Name = "Invert";
-            this.Invert.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Invert.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Invert.Width = 40;
+            this.SatellitesDataGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.SatellitesDataGridView_RowsAdded);
             // 
             // tabPage7
             // 
@@ -1064,6 +1005,68 @@
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // Satellite
+            // 
+            this.Satellite.HeaderText = "Satellite";
+            this.Satellite.Name = "Satellite";
+            this.Satellite.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Uplink
+            // 
+            this.Uplink.HeaderText = "Uplink";
+            this.Uplink.Name = "Uplink";
+            // 
+            // Downlink
+            // 
+            this.Downlink.HeaderText = "Downlink";
+            this.Downlink.Name = "Downlink";
+            // 
+            // Mode
+            // 
+            this.Mode.HeaderText = "Mode";
+            this.Mode.Name = "Mode";
+            this.Mode.Width = 50;
+            // 
+            // UpMode
+            // 
+            this.UpMode.HeaderText = "Up Mode";
+            this.UpMode.Name = "UpMode";
+            this.UpMode.Width = 50;
+            // 
+            // DownMode
+            // 
+            this.DownMode.HeaderText = "Down Mode";
+            this.DownMode.Name = "DownMode";
+            this.DownMode.Width = 50;
+            // 
+            // PLTone
+            // 
+            this.PLTone.HeaderText = "PLTone";
+            this.PLTone.Name = "PLTone";
+            this.PLTone.Width = 50;
+            // 
+            // UpDoppler
+            // 
+            this.UpDoppler.HeaderText = "Up Doppler";
+            this.UpDoppler.Name = "UpDoppler";
+            this.UpDoppler.Width = 50;
+            // 
+            // DownDoppler
+            // 
+            this.DownDoppler.HeaderText = "Down Doppler";
+            this.DownDoppler.Name = "DownDoppler";
+            this.DownDoppler.Width = 50;
+            // 
+            // Invert
+            // 
+            this.Invert.FalseValue = "false";
+            this.Invert.HeaderText = "Invert";
+            this.Invert.Name = "Invert";
+            this.Invert.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Invert.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Invert.TrueValue = "true";
+            this.Invert.Width = 40;
             // 
             // LogSettings
             // 
@@ -1173,16 +1176,6 @@
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button btnAddSatellite;
         private System.Windows.Forms.DataGridView SatellitesDataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Satellite;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Uplink;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Downlink;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Mode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UpMode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DownMode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PLTone;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UpDoppler;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DownDoppler;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Invert;
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.DataGridView BandPwrDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn Band;
@@ -1196,5 +1189,15 @@
         private System.Windows.Forms.ComboBox cboVirtPort;
         private System.Windows.Forms.RadioButton rdoWKOutput2;
         private System.Windows.Forms.RadioButton rdoWKOutput1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Satellite;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Uplink;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Downlink;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Mode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UpMode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DownMode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PLTone;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UpDoppler;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DownDoppler;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Invert;
     }
 }

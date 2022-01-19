@@ -9,14 +9,14 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>K3Log</RootNamespace>
     <AssemblyName>K3Log</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>G:\Documents\Visual Studio 2017\Projects\K3Log\K3Log\publish\</PublishUrl>
+    <PublishUrl>..publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -26,7 +26,14 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>12</ApplicationRevision>
+    <SupportUrl>http://n5tm.com</SupportUrl>
+    <ProductName>K3Log</ProductName>
+    <PublisherName>n5tm</PublisherName>
+    <SuiteName>K3 Logger</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>18</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -287,6 +294,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Interop.OmniRig.dll" />
+    <Content Include="macros.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OrbitTools\Core\Core.csproj">

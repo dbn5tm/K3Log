@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<macros>
+  <number shortcut="112" macroName="CQ" btnLabel="CQ" macroAction=" CQ CQ DE N5TM N5TM">0</number>
+  <number shortcut="113" macroName="TU" btnLabel="F2 - TU 5NN" macroAction="TU 5NN IN Ny Ny">1</number>
+  <number shortcut="114" macroName="TU" btnLabel="TU 73" macroAction="TU 73 DE N5TM">2</number>
+  <number shortcut="115" macroName="N5TM" btnLabel="F4 - N5TM" macroAction="N5TM">3</number>
+  <number shortcut="116" macroName="HisCall" btnLabel="f5 HisCall" macroAction="!">4</number>
+  <number shortcut="117" macroName="Reply" btnLabel="F6 - Reply" macroAction="! de n5tm k">5</number>
+  <number shortcut="118" macroName="Calls" btnLabel="F7 -  Calls" macroAction="! de *">6</number>
+  <number shortcut="119" macroName="AGN" btnLabel="F8 - AGN?" macroAction="agn?">7</number>
+  <number shortcut="120" macroName="macroStop" btnLabel="Stop TX" macroAction="@">11</number>
+</macros>

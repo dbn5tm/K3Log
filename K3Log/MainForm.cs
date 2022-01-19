@@ -2613,7 +2613,17 @@ namespace K3Log
                     }
                     else
                     {   // if mysiginfo is not set, assume home station Lotw[0]
-                        if (q.mysiginfo == "" || q.mysiginfo == "0") lotwRemote = LoTWLocations[0].Station;
+                        if (q.mysiginfo == "" || q.mysiginfo == "0")
+                        {
+                            if (LoTWLocations.Count > 0)
+                            {
+                                lotwRemote = LoTWLocations[0].Station;
+                            }
+                            else
+                            {
+                                lotwRemote = q.mysiginfo;
+                            }
+                        }
                         else lotwRemote = q.mysiginfo;
                     }
                     cboLoTWStation.Text = lotwRemote;
@@ -3158,14 +3168,18 @@ namespace K3Log
         }
         private void newSetting(object sender, LogSettings.LogSettingsEventArgs e)
         {
-            if(e.Comport1 != K3.PrimaryPort)
+            if(rig == "K3")
             {
-                K3.ClosePort();
-                K3 = new RadioCAT(1, e.Comport1, e.Baud1);
-                K3.PrimaryPort = e.Comport1;
-                K3.VPort = e.MirrorPort;
-                K3.InitSerialPort();
+                if(e.Comport1 != K3.PrimaryPort)
+                {
+                    K3.ClosePort();
+                    K3 = new RadioCAT(1, e.Comport1, e.Baud1);
+                    K3.PrimaryPort = e.Comport1;
+                    K3.VPort = e.MirrorPort;
+                    K3.InitSerialPort();
+                }
             }
+            
         }
 
         private void gridsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3319,11 +3333,12 @@ namespace K3Log
             }
             else
             {
-                string frq = selectedSatellite.Uplink.ToString("FA00000000.000").Replace(".", "");
+                satLinkRigFreq(1, selectedSatellite.Uplink);
+                /*string frq = selectedSatellite.Uplink.ToString("FA00000000.000").Replace(".", "");
                 K3.send(frq + ";");
                 Thread.Sleep(200);
                 int md = getsatOpMode(selectedSatellite.UpMode);
-                K3.send("MD" + md.ToString() + ";");
+                K3.send("MD" + md.ToString() + ";");*/
                 MyOmniRadio2.SetFreq(Convert.ToInt32(selectedSatellite.Downlink * 1000));
                 MyOmniRadio2.SetMode(selectedSatellite.DownMode);
                 txtPower.Text = "50";
@@ -3333,6 +3348,31 @@ namespace K3Log
             satTrack.selectSatellite(cbosatname.Text);
         }
         
+        private void satLinkRigFreq(int rignum, double freq)
+        {
+            if(rignum == 1)
+            {
+                if(rig == "K3")
+                {
+                    string frq = selectedSatellite.Uplink.ToString("FA00000000.000").Replace(".", "");
+                    K3.send(frq + ";");
+                    Thread.Sleep(200);
+                    int md = getsatOpMode(selectedSatellite.UpMode);
+                    K3.send("MD" + md.ToString() + ";");
+                    
+                }
+                else
+                {
+                    MyOmniRadio1.SetFreq(Convert.ToInt32(selectedSatellite.Uplink * 1000));
+                    MyOmniRadio1.SetMode(selectedSatellite.DownMode);
+                }
+            }
+            else
+            {
+
+            }
+        }
+
         private void newSatPosition(object sender, SatTrackEventArgs e)
         {
             this.InvokeAndClose((MethodInvoker)delegate
@@ -3404,9 +3444,13 @@ namespace K3Log
         {
             this.InvokeAndClose((MethodInvoker)delegate
             {
-                K3.ClosePort(); 
-                K3 = null;
-                Environment.Exit(Environment.ExitCode);
+                if(rig == "K3")
+                {
+                    K3.ClosePort(); 
+                    K3 = null;
+                    Environment.Exit(Environment.ExitCode);
+                }
+                
             });
         }
 

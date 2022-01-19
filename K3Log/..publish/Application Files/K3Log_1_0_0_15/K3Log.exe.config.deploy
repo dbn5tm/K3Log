@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <section name="K3Log.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false"/>
+    </sectionGroup>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
+  </configSections>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.8"/>
+  </startup>
+  <system.data>
+    <DbProviderFactories>
+      <remove invariant="MySql.Data.MySqlClient"/>
+      <add name="MySQL Data Provider" invariant="MySql.Data.MySqlClient" description=".Net Framework Data Provider for MySQL" type="MySql.Data.MySqlClient.MySqlClientFactory, MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d"/>
+      <remove invariant="System.Data.SQLite.EF6"/>
+      <add name="SQLite Data Provider (Entity Framework 6)" invariant="System.Data.SQLite.EF6" description=".NET Framework Data Provider for SQLite (Entity Framework 6)" type="System.Data.SQLite.EF6.SQLiteProviderFactory, System.Data.SQLite.EF6"/>
+    <remove invariant="System.Data.SQLite"/><add name="SQLite Data Provider" invariant="System.Data.SQLite" description=".NET Framework Data Provider for SQLite" type="System.Data.SQLite.SQLiteFactory, System.Data.SQLite"/></DbProviderFactories>
+  </system.data>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="v11.0"/>
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
+      <provider invariantName="System.Data.SQLite.EF6" type="System.Data.SQLite.EF6.SQLiteProviderServices, System.Data.SQLite.EF6"/>
+    </providers>
+  </entityFramework>
+  <userSettings>
+    <K3Log.Properties.Settings>
+      <setting name="SQLiteFile" serializeAs="String">
+        <value>C:\\Users\\n5tm\\Documents\N5TM_DB\N5TM_Full_NextGen.SQLite</value>
+      </setting>
+      <setting name="Rig" serializeAs="String">
+        <value>K3</value>
+      </setting>
+      <setting name="MyCall" serializeAs="String">
+        <value>N5TM</value>
+      </setting>
+      <setting name="MyGrid" serializeAs="String">
+        <value>EL29ds</value>
+      </setting>
+      <setting name="Port" serializeAs="String">
+        <value>Com2</value>
+      </setting>
+      <setting name="Baud" serializeAs="String">
+        <value>38400</value>
+      </setting>
+      <setting name="Rig2" serializeAs="String">
+        <value>None</value>
+      </setting>
+      <setting name="SMSNumber" serializeAs="String">
+        <value>7133986432@tmomail.net</value>
+      </setting>
+      <setting name="NoCallGrids" serializeAs="String">
+        <value>EL29;EM20</value>
+      </setting>
+      <setting name="CountryList" serializeAs="String">
+        <value>C:\\Users\\n5tm\\Documents\\N5TM_DB\\country.xml</value>
+      </setting>
+      <setting name="BandPlan" serializeAs="String">
+        <value>C:\\Users\\n5tm\\Documents\\N5TM_DB\\bandplan_r2.xml</value>
+      </setting>
+      <setting name="QRZLogin" serializeAs="String">
+        <value>n5tm</value>
+      </setting>
+      <setting name="QRZPwd" serializeAs="String">
+        <value>dange123</value>
+      </setting>
+      <setting name="WorkedGridColor" serializeAs="String">
+        <value>255, 128, 0</value>
+      </setting>
+      <setting name="InitalSpotColor" serializeAs="String">
+        <value>0, 192, 0</value>
+      </setting>
+      <setting name="BoundaryColor" serializeAs="String">
+        <value>Lime</value>
+      </setting>
+      <setting name="WorkedSpotColor" serializeAs="String">
+        <value>Blue</value>
+      </setting>
+      <setting name="NewGridColor" serializeAs="String">
+        <value>Red</value>
+      </setting>
+      <setting name="LowerLeftGrid" serializeAs="String">
+        <value>CL59</value>
+      </setting>
+      <setting name="UpperRightGrid" serializeAs="String">
+        <value>FN95</value>
+      </setting>
+      <setting name="MyName" serializeAs="String">
+        <value>Dan</value>
+      </setting>
+      <setting name="WKeyer" serializeAs="String">
+        <value>True</value>
+      </setting>
+      <setting name="WKSidetone" serializeAs="String">
+        <value>False</value>
+      </setting>
+      <setting name="WKSToneFreq" serializeAs="String">
+        <value>1</value>
+      </setting>
+      <setting name="WKRevPdl" serializeAs="String">
+        <value>False</value>
+      </setting>
+      <setting name="WKPdlMode" serializeAs="String">
+        <value>0</value>
+      </setting>
+      <setting name="WKComport" serializeAs="String">
+        <value>COM5</value>
+      </setting>
+      <setting name="WKCTSpace" serializeAs="String">
+        <value>False</value>
+      </setting>
+      <setting name="WKAutoSpace" serializeAs="String">
+        <value>False</value>
+      </setting>
+      <setting name="MyCnty" serializeAs="String">
+        <value>Harris</value>
+      </setting>
+      <setting name="MyContinent" serializeAs="String">
+        <value>NA</value>
+      </setting>
+      <setting name="MyCQZone" serializeAs="String">
+        <value>4</value>
+      </setting>
+      <setting name="MyITUZone" serializeAs="String">
+        <value>7</value>
+      </setting>
+      <setting name="MyDXCC" serializeAs="String">
+        <value>291</value>
+      </setting>
+      <setting name="VirtualPort" serializeAs="String">
+        <value>COM15</value>
+      </setting>
+      <setting name="VirtualBaud" serializeAs="String">
+        <value>38400</value>
+      </setting>
+      <setting name="WKOutport" serializeAs="String">
+        <value>0</value>
+      </setting>
+      <setting name="LoTW" serializeAs="String">
+        <value/>
+      </setting>
+      <setting name="Alt1Port" serializeAs="String">
+        <value>COM14</value>
+      </setting>
+      <setting name="Alt2Port" serializeAs="String">
+        <value>COM19</value>
+      </setting>
+    </K3Log.Properties.Settings>
+  </userSettings>
+</configuration>

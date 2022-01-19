@@ -293,7 +293,25 @@ namespace K3Log
                     thisSatellite.PLTone = r.Cells["PLTone"].Value.ToString();
                     thisSatellite.UpDoppler = Convert.ToDouble(r.Cells["UpDoppler"].Value);
                     thisSatellite.DownDoppler = Convert.ToDouble(r.Cells["DownDoppler"].Value);
-                    thisSatellite.Invert = (bool)r.Cells["Invert"].Value;
+                    if (r.Cells["Invert"].Value != null )
+                    {
+                        if (r.Cells["Invert"].Value == "" || r.Cells["Invert"].Value == "false" || (bool) r.Cells["Invert"].Value == false)
+                        {
+                            thisSatellite.Invert = false;
+                            r.Cells["Invert"].Value = "false";
+                        }
+                        else
+                        {
+                            thisSatellite.Invert = true;
+                            r.Cells["Invert"].Value = "true";
+                        }
+                    }
+                    else
+                    {
+                        thisSatellite.Invert = false;
+                        r.Cells["Invert"].Value = "false";
+                    }
+                        
                     Properties.Settings.Default.Satellites.mySatellites.Add(thisSatellite);
                 }
             }
@@ -321,6 +339,13 @@ namespace K3Log
                 }
             }
             Properties.Settings.Default.Save();
+        }
+
+        private void SatellitesDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            // this is necessary to stop null error when the box is not manually checked.
+            //int nr = SatellitesDataGridView.NewRowIndex;
+            //SatellitesDataGridView.Rows[nr].Cells["Invert"].Value = false;
         }
     }
     
