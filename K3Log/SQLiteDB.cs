@@ -63,7 +63,14 @@ namespace K3Log
             }
             else
             {
-                sql = "SELECT DISTINCT " + fld + " FROM " + tbl + " Where " + test + " " + cond + " " + "'" + val + "' ORDER BY gridsquare";
+                if (cols.Length == 1)
+                {
+                    sql = "SELECT DISTINCT " + cols[0] + " FROM " + tbl + " Where " + test + " " + cond + " " + "'" + val + "' ORDER BY " + cols[0];
+                }
+                else 
+                { 
+                    sql = "SELECT DISTINCT " + cols[0] + ", " + cols[1] + ", " + cols[2] +  " FROM " + tbl + " Where " + test + " " + cond + " " + "'" + val + "' ORDER BY gridsquare";
+                }
             }
             List<string> inLog = new List<string>();
             SQLiteCommand command = new SQLiteCommand(sql, conn);
@@ -71,20 +78,58 @@ namespace K3Log
             { 
             
             //int i = 0;
+                inLog.Clear();
                 while (reader.Read())
                 {
                     String mylog = "";
-                    //foreach (String col in cols)
-                    //{
-                    mylog += reader[0].ToString(); //+ ",";
-                    //}
-                    inLog.Add(mylog);
+                    if (reader[0].ToString().Length > 3)
+                    {
+                        foreach (String col in cols)
+                        {
+                            mylog += reader[col].ToString() + ",";
+                        }
+                        inLog.Add(mylog.TrimEnd(','));
+                    }
                 }
             }
             return inLog;
 
         }
+        public List<string> RetrievePerExtraCondx(String tbl, String fld, String val, String fld2, String val2, String cond, String[] cols)
+        {
 
+            String sql;
+            if (cond.Contains("LIKE"))
+            {
+                sql = "SELECT * FROM " + tbl + " WHERE " + fld + " " + cond + " " + "'" + val + "%'";
+            }
+            else
+            {
+                sql = "SELECT * FROM " + tbl + " WHERE (" + fld + " " + cond + " " + "'" + val + "' AND " + fld2 + " " + cond + "'" + val2 + "')";
+            }
+            List<string> inLog = new List<string>();
+
+            using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+
+                    //int i = 0;
+
+                    while (reader.Read())
+                    {
+                        String mylog = "";
+                        foreach (String col in cols)
+                        {
+                            mylog += reader[col].ToString() + ",";
+                        }
+                        inLog.Add(mylog);
+                    }
+                }
+            }
+            return inLog;
+
+        }
         public List<string> Retrieve(String tbl, String fld, String val, String cond, String[] cols)
         {
 

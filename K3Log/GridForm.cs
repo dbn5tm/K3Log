@@ -41,7 +41,9 @@ namespace K3Log
         string upperrightGrid; 
 
         public List<String> myWorkedGrids;
-        
+        public List<String> myWorkedCallInGrid;
+        public List<String> myWorkedDateInGrid;
+
         List<gridspot> grids = new List<gridspot>();
 
         Color WorkedGridColor;
@@ -62,13 +64,12 @@ namespace K3Log
         {
             lowerleftGrid = Properties.Settings.Default.LowerLeftGrid;
             upperrightGrid = Properties.Settings.Default.UpperRightGrid;
-            initdgv();
             WorkedGridColor = Properties.Settings.Default.WorkedGridColor;
             NewGridSpotColor = Properties.Settings.Default.NewGridColor;
             WorkedSpotColor = Properties.Settings.Default.WorkedSpotColor;
             BoundaryColor = Properties.Settings.Default.BoundaryColor;
             InitialSpotColor = Properties.Settings.Default.InitalSpotColor;
-            
+            initdgv();
         }
         
         public void highlitegrid(string grid, string spottype, string info)
@@ -212,7 +213,7 @@ namespace K3Log
                             codecell.Style.ForeColor = Color.Blue;
                             if (myWorkedGrids.Contains(codecell.Value))
                             {
-                                codecell.Style.BackColor = Color.LightSalmon;
+                                codecell.Style.BackColor = WorkedGridColor;
                                 addTogridsList(codecell.Value.ToString(), "WorkedGrid", "");
                             }
                         }
@@ -220,7 +221,7 @@ namespace K3Log
                         {
                             if (myWorkedGrids.Contains(codecell.Value))
                             {
-                                codecell.Style.BackColor = Color.LightSalmon;
+                                codecell.Style.BackColor = WorkedGridColor;
                                 addTogridsList(codecell.Value.ToString(), "WorkedGrid", "");
                             }
                         }
@@ -310,6 +311,14 @@ namespace K3Log
                  // show callsign and timestamp for spot
                 string thisgrid = dgvGrids.SelectedCells[0].Value.ToString();
                 gridspot thisspot = grids.Find(item => item.grid == thisgrid);
+                // if not a spot, go get the worked grid callsign
+                if(thisspot.info == "")
+                {
+                    int callindex = myWorkedGrids.FindIndex(a => a.Contains(thisgrid));
+                    thisspot.info = myWorkedCallInGrid[callindex];
+                    thisspot.timestamp = Convert.ToDateTime(myWorkedDateInGrid[callindex]);
+                }
+                
                 gridCustomToolTip.Controls[1].Text = string.Format("Grid: {0}, Call: {1}", thisgrid, thisspot.info);
                 gridCustomToolTip.Controls[0].Text = thisspot.timestamp.ToString();
                 if (!gridToolTip.Visible)

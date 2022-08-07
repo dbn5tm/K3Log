@@ -26,6 +26,7 @@ namespace K3Log
         string operatorName = "xxxx";
         string grid = "xx01xx";
         List<String> myWorkedGrids;
+        List<String> myWorkedGridsOnly;   
         List<String> myWorkedCalls;
         List<String> spottedCalls = new List<string>();
         int autoCondxIndex;
@@ -127,7 +128,8 @@ namespace K3Log
         {
             if (Properties.Settings.Default.Satellites != null)
             {
-                
+                mySats.mySatellites.Clear();    
+                cbosatname.Items.Clear();
                 foreach (Satellites sat in Properties.Settings.Default.Satellites.mySatellites)
                 {
                     Satellites newSatellite = new Satellites();
@@ -474,12 +476,29 @@ namespace K3Log
             
             
         }
+        private List<String> GetCallsThisGrid (String[] cols, string thisgrid, String ret)
+        {
+            List<String> list = new List<String>();
+            list = logbook.RetrievePerExtraCondx("Log", "substr(gridsquare, 1, 4)", thisgrid, "band", cboBand.Text, "=", cols);      
+
+            return list;
+        }
         private List<String> GetWorked(String[] cols, String ret)
         {
             //SQLiteDB logbook = new SQLiteDB(sqliteConn);
             //String[] cols = { "GridSquare" };
-            List<String> WorkedGrids = logbook.RetrieveDistinct("Log", ret, "band", cboBand.Text, "=", cols);
-            return WorkedGrids;
+            if (chkSatellite.Checked)
+            {
+                List<String> Worked = logbook.RetrieveDistinct("Log", ret, "propmode", "SAT", "=", cols);
+                return Worked;
+            }
+            else
+            {
+                List<String> Worked = logbook.RetrieveDistinct("Log", ret, "band", cboBand.Text, "=", cols);
+                return Worked;
+            }
+            
+            
         }
 
         private void postspots(String msg)
@@ -718,7 +737,7 @@ namespace K3Log
                     case 1:   // status
                         SetTextBox(txtCallsign, e.xDxCall, false, Color.White);
                         SetTextBox(txtRSTs, e.xReport, false, Color.White);
-                        if (myWorkedGrids.Contains(e.xDxGrid))
+                        if (myWorkedGridsOnly.Contains(e.xDxGrid))
                         {
                             SetTextBox(txtGrid, e.xDxGrid, false, Color.LightBlue);
                         }
@@ -753,7 +772,7 @@ namespace K3Log
                         
                         if (!nocallGrids.Contains(msg.grid))
                         {
-                            if (msg.called == callsign)
+                            if (msg.called == callsign)  // are we calling this station?
                             {
                                 if (chkautocall.Checked && !calling)
                                 {
@@ -804,7 +823,7 @@ namespace K3Log
                                             if (msg.grid != "")
                                             {
                                                 //  myWorkedGrids is updated with band change.
-                                                if (!myWorkedGrids.Contains(msg.grid) || msg.grid == "nil")
+                                                if (!myWorkedGridsOnly.Contains(msg.grid) || msg.grid == "nil")
                                                 {
                                                     markcolor = Color.Red;   // new grid this band detected
                                                     qualmsg = "Grid";
@@ -856,8 +875,8 @@ namespace K3Log
                                                     {
                                                         autocall = true;
                                                     }
-
-                                                    markcolor = Color.Green;
+                                                    if(postmsg != "Grid") markcolor = Color.Green;
+                                                    
                                                     postmsg += "BndMd";
                                                     //SetRichTextBox(WorkedBox, e.xMessage, true, markcolor, "BndMd");
                                                 }
@@ -917,6 +936,7 @@ namespace K3Log
                         }
                         else
                         {
+                            //  local station don't post
                             markcolor = Color.Gray;
                             SetRichTextBox(WorkedBox, e.xMessage, true, markcolor, "Local");
                         }
@@ -943,7 +963,7 @@ namespace K3Log
                             SetTextBox(txtEndDate, DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ssZ"), false, Color.White);
                             newQsoId = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmssfff");
                         }
-                        if (myWorkedGrids.Contains(e.xDxGrid))
+                        if (myWorkedGridsOnly.Contains(e.xDxGrid))
                         {
                             SetTextBox(txtGrid, e.xDxGrid, false, Color.LightBlue);
                         }
@@ -2051,13 +2071,25 @@ namespace K3Log
                 FillView(LogdataGridView, "");
                 String[] tofind = { "gridSquare" };
                 myWorkedGrids = GetWorked(tofind, "substr(gridsquare, 1, 4)");
-                tofind[0] = "Call";
+                myWorkedGridsOnly = SplitGridsOut(myWorkedGrids);
+
+                tofind[0] = "callsign";
                 myWorkedCalls = GetWorked(tofind, "callsign");
                 calling = false;
                 btnTX.BackColor = Color.Green;
                 btnLog.BackColor = Color.LightGray;
                 txtCallsign.Focus();
             }
+        }
+
+        private List<String> SplitGridsOut(List<String> StrList)
+        {
+            List<String> ret = new List<String>();
+            foreach (string g in StrList)
+            {
+                ret.Add(g.Split(',')[0]);
+            }
+            return ret;
         }
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2807,7 +2839,7 @@ namespace K3Log
 
         private void cboBand_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(Properties.Settings.Default.Rig == "None")
+            if (Properties.Settings.Default.Rig == "None")
             {
                 string[] freqreslolve = { "137", "472", "1800", "3500", "5200", "7000", "10100", "14000", "18700", "21000", "24500", "28000", "50000", "144000", "222000", "432000", "1296000" };
                 txtFreq.Text = freqreslolve[cboBand.SelectedIndex];
@@ -2817,13 +2849,13 @@ namespace K3Log
             {
                 case "630m":
                     SetTextBox(txtPower, "150", false, Color.White);
-                    
+
                     break;
                 case "70cm":
                     SetTextBox(txtPower, "10", false, Color.White);
                     break;
                 case "2m":
-                    if(cboProp.Text == "SAT")
+                    if (cboProp.Text == "SAT")
                     {
                         SetTextBox(txtPower, "50", false, Color.White);
                     }
@@ -2831,20 +2863,22 @@ namespace K3Log
                     {
                         SetTextBox(txtPower, "1000", false, Color.White);
                     }
-                    
+
                     break;
                 default:
                     SetTextBox(txtPower, "500", false, Color.White);
-                    
+
                     break;
 
             }
-            
+
             WorkedBox.Text = "";
-            String[] tofind = { "gridsquare" };
+            String[] tofind = { "substr(gridsquare, 1, 4)", "callsign", "qsodate" };
             myWorkedGrids = GetWorked(tofind, "substr(gridsquare, 1, 4)");
-            tofind[0] = "callsign";
-            myWorkedCalls = GetWorked(tofind, "callsign");
+            myWorkedGridsOnly = SplitGridsOut(myWorkedGrids);
+
+            String[] tofindcalls = {"callsign"};
+            myWorkedCalls = GetWorked(tofindcalls, "callsign");
             // no spots to Slack VHF-Chat if not on VHF Band
             if (cboBand.Text != "6m" || cboBand.Text != "2m") chkSpot.Checked = false;
         }
@@ -3179,6 +3213,7 @@ namespace K3Log
                     K3.InitSerialPort();
                 }
             }
+            loadSatellites();
             
         }
 
@@ -3192,8 +3227,18 @@ namespace K3Log
                     String[] tofind = { "gridSquare" };
                     myWorkedGrids = GetWorked(tofind, "substr(gridsquare, 1, 4)");
                 }
-
-                DecodedGrids.myWorkedGrids = myWorkedGrids;
+                List<String> gridsonly = new List<String>();
+                List<String> callsonly = new List<String>();
+                List<String> dateonly = new List<String>();
+                foreach (string grid in myWorkedGrids)
+                {
+                    gridsonly.Add(grid.Split(',')[0].Substring(0,4));
+                    callsonly.Add(grid.Split(',')[1]);
+                    dateonly.Add(grid.Split(',')[2]);
+                }
+                DecodedGrids.myWorkedGrids = gridsonly;
+                DecodedGrids.myWorkedCallInGrid = callsonly;
+                DecodedGrids.myWorkedDateInGrid = dateonly;
                 DecodedGrids.Show();
             }
             catch (Exception)

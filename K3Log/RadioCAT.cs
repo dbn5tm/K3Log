@@ -252,7 +252,7 @@ namespace K3Log
                 //K3Com.Dispose();
                 killthread = true;
                 cmdtimer.Enabled = false;
-                K3Com.Close();
+                //K3Com.Close();
                 //VirtCom.Close();
             }
             catch (Exception)
