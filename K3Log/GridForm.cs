@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees;
@@ -43,6 +44,7 @@ namespace K3Log
         public List<String> myWorkedGrids;
         public List<String> myWorkedCallInGrid;
         public List<String> myWorkedDateInGrid;
+        public List<String> FFMAGrids = new List<string>();
 
         List<gridspot> grids = new List<gridspot>();
 
@@ -70,6 +72,8 @@ namespace K3Log
             BoundaryColor = Properties.Settings.Default.BoundaryColor;
             InitialSpotColor = Properties.Settings.Default.InitalSpotColor;
             initdgv();
+            int ffmanum = FFMAGridsCount();
+            this.Text = "FFMA Grids Worked: " + ffmanum.ToString(); 
         }
         
         public void highlitegrid(string grid, string spottype, string info)
@@ -127,7 +131,23 @@ namespace K3Log
                 //}
             }
         }
-
+        private int FFMAGridsCount()
+        {
+            loadFFMAGridsList();
+            List<String> FFMAGridsWorked = new List<String>();  
+            
+            foreach (string g in myWorkedGrids)
+            {
+                if (FFMAGrids.Contains(g)) FFMAGridsWorked.Add(g);
+            }
+            return FFMAGridsWorked.Count();
+        }
+        private void loadFFMAGridsList()
+        {
+            var fileName = Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData), "K3Log\\FFMAGrids.txt");
+            FFMAGrids = File.ReadAllLines(fileName).ToList();
+        }
         public static IEnumerable<string> GetColumns(char startchar, char endchar)
         {
             string s = null;

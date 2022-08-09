@@ -49,7 +49,9 @@ namespace K3Log
         private string myDB = "";
         TextBox thisRadioBox;
         TextBox thisRadioMode;
-        Thread backgroundK3;
+        List<String> FFMAGrids;
+        
+        //Thread backgroundK3;
         // This is the real dB, be careful
         String sqliteConn; //= "Data Source=" +
                            //"E:\\Documents\\N5TM_DB\\N5TM_Full_NextGen.SQLite;Version=3;";
@@ -306,6 +308,7 @@ namespace K3Log
 
             countrylist = new countryXML(Properties.Settings.Default.CountryList);
             bandlist = new BandplanXML(Properties.Settings.Default.BandPlan);
+            
             getLotWLocations();
             loadSatellites();
             // open SQLite DB
@@ -2072,7 +2075,7 @@ namespace K3Log
                 String[] tofind = { "gridSquare" };
                 myWorkedGrids = GetWorked(tofind, "substr(gridsquare, 1, 4)");
                 myWorkedGridsOnly = SplitGridsOut(myWorkedGrids);
-
+                
                 tofind[0] = "callsign";
                 myWorkedCalls = GetWorked(tofind, "callsign");
                 calling = false;
@@ -3236,7 +3239,7 @@ namespace K3Log
                     callsonly.Add(grid.Split(',')[1]);
                     dateonly.Add(grid.Split(',')[2]);
                 }
-                DecodedGrids.myWorkedGrids = gridsonly;
+                DecodedGrids.myWorkedGrids = gridsonly.Distinct().ToList();
                 DecodedGrids.myWorkedCallInGrid = callsonly;
                 DecodedGrids.myWorkedDateInGrid = dateonly;
                 DecodedGrids.Show();
