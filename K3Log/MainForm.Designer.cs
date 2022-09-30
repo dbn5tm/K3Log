@@ -117,18 +117,19 @@
             this.QsoDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TimeOn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LoTWStation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Call = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Mode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCall = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colMode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Band = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Freq = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RstSent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RstRcvd = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rcvd = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Sent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Country = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GridSquare = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.OpName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colGrid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Propagation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.QsoId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Prop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LoTW = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Qsoid = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtRadio1Mode = new System.Windows.Forms.TextBox();
             this.txtRadio1SubMode = new System.Windows.Forms.TextBox();
             this.btnAll = new System.Windows.Forms.Button();
@@ -185,6 +186,7 @@
             this.lblComconnection = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblWKConnected = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblQRZKeyStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.chkLoTW = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogdataGridView)).BeginInit();
@@ -294,6 +296,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Silver;
+            this.groupBox1.Controls.Add(this.chkLoTW);
             this.groupBox1.Controls.Add(this.cboLoTWStation);
             this.groupBox1.Controls.Add(this.lblATNO);
             this.groupBox1.Controls.Add(this.label21);
@@ -1073,21 +1076,22 @@
             this.QsoDate,
             this.TimeOn,
             this.LoTWStation,
-            this.Call,
-            this.Mode,
+            this.colCall,
+            this.colMode,
             this.Band,
             this.Freq,
-            this.RstSent,
-            this.RstRcvd,
+            this.Rcvd,
+            this.Sent,
             this.Country,
-            this.GridSquare,
-            this.OpName,
+            this.colGrid,
+            this.colName,
             this.Comment,
-            this.Propagation,
-            this.QsoId});
+            this.Prop,
+            this.LoTW,
+            this.Qsoid});
             this.LogdataGridView.Location = new System.Drawing.Point(25, 254);
             this.LogdataGridView.Name = "LogdataGridView";
-            this.LogdataGridView.Size = new System.Drawing.Size(817, 167);
+            this.LogdataGridView.Size = new System.Drawing.Size(765, 167);
             this.LogdataGridView.TabIndex = 20;
             this.LogdataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.LogdataGridView_CellContentClick);
             this.LogdataGridView.SelectionChanged += new System.EventHandler(this.LogdataGridView_SelectionChanged);
@@ -1099,7 +1103,6 @@
             this.QsoDate.DefaultCellStyle = dataGridViewCellStyle1;
             this.QsoDate.HeaderText = "QSO Date";
             this.QsoDate.Name = "QsoDate";
-            this.QsoDate.Width = 70;
             // 
             // TimeOn
             // 
@@ -1108,30 +1111,30 @@
             this.TimeOn.DefaultCellStyle = dataGridViewCellStyle2;
             this.TimeOn.HeaderText = "End Date";
             this.TimeOn.Name = "TimeOn";
-            this.TimeOn.Width = 70;
             // 
             // LoTWStation
             // 
             this.LoTWStation.HeaderText = "LoTW Station";
             this.LoTWStation.Name = "LoTWStation";
-            this.LoTWStation.Width = 70;
+            this.LoTWStation.Width = 50;
             // 
-            // Call
+            // colCall
             // 
-            this.Call.HeaderText = "Call";
-            this.Call.Name = "Call";
+            this.colCall.HeaderText = "Call";
+            this.colCall.Name = "colCall";
+            this.colCall.Width = 70;
             // 
-            // Mode
+            // colMode
             // 
-            this.Mode.HeaderText = "Mode";
-            this.Mode.Name = "Mode";
-            this.Mode.Width = 50;
+            this.colMode.HeaderText = "Mode";
+            this.colMode.Name = "colMode";
+            this.colMode.Width = 50;
             // 
             // Band
             // 
             this.Band.HeaderText = "Band";
             this.Band.Name = "Band";
-            this.Band.Width = 40;
+            this.Band.Width = 50;
             // 
             // Freq
             // 
@@ -1139,51 +1142,56 @@
             this.Freq.Name = "Freq";
             this.Freq.Width = 70;
             // 
-            // RstSent
+            // Rcvd
             // 
-            this.RstSent.HeaderText = "Rcvd";
-            this.RstSent.Name = "RstSent";
-            this.RstSent.Width = 40;
+            this.Rcvd.HeaderText = "Rcvd";
+            this.Rcvd.Name = "Rcvd";
+            this.Rcvd.Width = 50;
             // 
-            // RstRcvd
+            // Sent
             // 
-            this.RstRcvd.HeaderText = "Sent";
-            this.RstRcvd.Name = "RstRcvd";
-            this.RstRcvd.Width = 40;
+            this.Sent.HeaderText = "Sent";
+            this.Sent.Name = "Sent";
+            this.Sent.Width = 50;
             // 
             // Country
             // 
             this.Country.HeaderText = "Country";
             this.Country.Name = "Country";
             // 
-            // GridSquare
+            // colGrid
             // 
-            this.GridSquare.HeaderText = "Grid";
-            this.GridSquare.Name = "GridSquare";
-            this.GridSquare.Width = 60;
+            this.colGrid.HeaderText = "Grid";
+            this.colGrid.Name = "colGrid";
+            this.colGrid.Width = 70;
             // 
-            // OpName
+            // colName
             // 
-            this.OpName.HeaderText = "Name";
-            this.OpName.Name = "OpName";
+            this.colName.HeaderText = "Name";
+            this.colName.Name = "colName";
             // 
             // Comment
             // 
             this.Comment.HeaderText = "Comment";
             this.Comment.Name = "Comment";
-            this.Comment.Width = 130;
+            this.Comment.Width = 180;
             // 
-            // Propagation
+            // Prop
             // 
-            this.Propagation.HeaderText = "Prop";
-            this.Propagation.Name = "Propagation";
-            this.Propagation.Width = 40;
+            this.Prop.HeaderText = "Prop";
+            this.Prop.Name = "Prop";
+            this.Prop.Width = 70;
             // 
-            // QsoId
+            // LoTW
             // 
-            this.QsoId.HeaderText = "QsoId";
-            this.QsoId.Name = "QsoId";
-            this.QsoId.ReadOnly = true;
+            this.LoTW.HeaderText = "LoTw";
+            this.LoTW.Name = "LoTW";
+            this.LoTW.Width = 70;
+            // 
+            // Qsoid
+            // 
+            this.Qsoid.HeaderText = "Qsoid";
+            this.Qsoid.Name = "Qsoid";
             // 
             // txtRadio1Mode
             // 
@@ -1768,6 +1776,16 @@
             this.lblQRZKeyStatus.Size = new System.Drawing.Size(58, 19);
             this.lblQRZKeyStatus.Text = "QRZ Key1";
             // 
+            // chkLoTW
+            // 
+            this.chkLoTW.AutoSize = true;
+            this.chkLoTW.Location = new System.Drawing.Point(223, 91);
+            this.chkLoTW.Name = "chkLoTW";
+            this.chkLoTW.Size = new System.Drawing.Size(81, 17);
+            this.chkLoTW.TabIndex = 85;
+            this.chkLoTW.Text = "LoTW CFM";
+            this.chkLoTW.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1985,21 +2003,6 @@
         private System.Windows.Forms.TextBox txtRXFreq;
         private System.Windows.Forms.Label lblATNO;
         private System.Windows.Forms.ComboBox cboLoTWStation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn QsoDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TimeOn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LoTWStation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Call;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Mode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Band;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Freq;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RstSent;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RstRcvd;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Country;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridSquare;
-        private System.Windows.Forms.DataGridViewTextBoxColumn OpName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Propagation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn QsoId;
         private System.Windows.Forms.ComboBox cboFactor;
         private System.Windows.Forms.TextBox txtSatPosition;
         private System.Windows.Forms.TextBox txtRangeRate;
@@ -2015,6 +2018,23 @@
         private System.Windows.Forms.ToolStripStatusLabel lblComconnection;
         private System.Windows.Forms.ToolStripStatusLabel lblWKConnected;
         private System.Windows.Forms.ToolStripStatusLabel lblQRZKeyStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn QsoDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TimeOn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LoTWStation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCall;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colMode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Band;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Freq;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rcvd;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Country;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Prop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LoTW;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Qsoid;
+        private System.Windows.Forms.CheckBox chkLoTW;
     }
 }
 

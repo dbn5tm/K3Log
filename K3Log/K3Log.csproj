@@ -76,6 +76,9 @@
   <PropertyGroup>
     <StartupObject>K3Log.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>K3.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
@@ -294,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Interop.OmniRig.dll" />
+    <Content Include="K3.ico" />
     <Content Include="macros.xml" />
   </ItemGroup>
   <ItemGroup>

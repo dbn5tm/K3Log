@@ -163,12 +163,16 @@ namespace K3Log
             get { return Convert.ToBoolean(getColValue("lotw_sent")); }
             set { setColValue("lotw_sent", value.ToString()); }
         }*/
-        public bool lotw_rcvd;
-        /*
+        public bool lotw_rcvd
         {
-            get { return Convert.ToBoolean(getColValue("lotw_rcvd")); }
-            set { setColValue("lotw_rcvd", value.ToString()); }
-        }*/
+            get { return parseQsoConfirmations("LoTW",qsoconfirmations); }
+            set {  }
+        }
+        public string qsoconfirmations
+        {
+            get { return getColValue("qsoconfirmations"); }
+            set { setColValue("qsoconfirmations", value.ToString()); }
+        }
         public string lotw_sent_date;
         public string lotw_rcvd_date;
         public bool qsl_sent;
@@ -221,7 +225,29 @@ namespace K3Log
         List<String> colNames = new List<string>();  // use this to rebuild the Insert sql
         List<String> colValue = new List<string>();
         private SQLiteConnection my_db;
+        private bool parseQsoConfirmations(string field, string qsocfm)
+        {
+            if (qsocfm.Contains("LOTW"))
+            {
+                string q = qsocfm.Split('W')[1];
+                switch (field)
+                {
+                    case "LoTW":
+                        string[] flds = q.Split(':');
+                        if (flds[2].Contains("Yes")) return true;
 
+                        break;
+
+                }
+            }
+            else
+            {
+                string q = "False";
+            }
+            
+
+            return false;
+        }
         public QSO(SQLiteConnection conn)
         {
             my_db = conn;
@@ -294,7 +320,8 @@ namespace K3Log
 
         public String getColValue(String coln)
         {
-            return colValue[colNames.FindIndex(a => a.Equals(coln))];
+            string ret = colValue[colNames.FindIndex(a => a.Equals(coln))];
+            return ret; // colValue[colNames.FindIndex(a => a.Equals(coln))];
         }
 
         public void setColValue(String coln, String colv)
@@ -349,7 +376,8 @@ namespace K3Log
                 {
                     SQLiteCommand cmd = my_db.CreateCommand();
                     cmd = new SQLiteCommand("UPDATE Log Set qsodate = '" + this.date +
-                        "', qsodate = '" + this.date +
+                        "', qsodate = '" + this.start +
+                        "', qsoenddate = '" + this.date +
                         "', callsign = '" + this.callsign +
                         "', band = '" + this.band +
                         "', bandrx = '" + this.bandrx +
@@ -379,7 +407,8 @@ namespace K3Log
                         "', name = '" + this.name +
                         "', operator = '" + this.theoperator +
                         "', ownercallsign = '" + this.ownercallsign +
-                        "', propmode = '" + this.propmode + "' " +
+                        "', propmode = '" + this.propmode + 
+                        "', qsoconfirmations = '" + this.qsoconfirmations + "' " +
                         "WHERE qsoid = '" + QsoId + "'", my_db);
 
 
@@ -437,6 +466,7 @@ namespace K3Log
                     this.myituzone = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("myituzone")));
                     this.mycqzone = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("mycqzone")));
                     this.mysiginfo = reader.GetValue(reader.GetOrdinal("mysiginfo")).ToString();
+                    this.qsoconfirmations = reader.GetValue(reader.GetOrdinal("qsoconfirmations")).ToString();
                     ret = true;
                 }
 

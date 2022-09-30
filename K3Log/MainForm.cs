@@ -14,8 +14,9 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Reflection;
-
-
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Zeptomoby.OrbitTools;
+using System.Diagnostics;
 
 namespace K3Log
 {
@@ -47,8 +48,8 @@ namespace K3Log
         string[] mode = { "", "LSB", "USB", "CW", "FM", "AM", "DATA", "CW-R", "CW-R", "DATA-R" };
         private short radioport = 0;
         private string myDB = "";
-        TextBox thisRadioBox;
-        TextBox thisRadioMode;
+        System.Windows.Forms.TextBox thisRadioBox;
+        System.Windows.Forms.TextBox thisRadioMode;
         List<String> FFMAGrids;
         
         //Thread backgroundK3;
@@ -64,7 +65,7 @@ namespace K3Log
         SQLiteDB logbook;
         GridForm DecodedGrids;
         //XDocument xmlDoc;
-        List<Button> MacroButtons = new List<Button>();
+        List<System.Windows.Forms.Button> MacroButtons = new List<System.Windows.Forms.Button>();
         // Use this one for testing.  It is a backup
         //SQLiteConnection my_db = new SQLiteConnection("Data Source=" +
         //"C:\\Users\\Dan\\Documents\\N5TM_DB\\N5TM_Full.SQLite;Version=3;");
@@ -118,8 +119,12 @@ namespace K3Log
                     newStation.CQZone = lotw.CQZone;
                     newStation.County = lotw.County;
                     newStation.State = lotw.State;
-                    LoTWLocations.Add(lotw);
-                    cboLoTWStation.Items.Add(lotw.Station);
+                    if(lotw.Station != null)
+                    {
+                        LoTWLocations.Add(lotw);
+                        cboLoTWStation.Items.Add(lotw.Station);
+                    }
+                    
                 }
             }                
             
@@ -217,10 +222,12 @@ namespace K3Log
                             read.GetValue(read.GetOrdinal("name")),
                             read.GetValue(read.GetOrdinal("comment")),
                             read.GetValue(read.GetOrdinal("propmode")),
+                            read.GetValue(read.GetOrdinal("qsoconfirmations")),
                             read.GetValue(read.GetOrdinal("qsoId"))
                             });
                         }
                     }
+                    dgv.Sort(dgv.Columns["qsodate"], System.ComponentModel.ListSortDirection.Descending);
                 });
             }
         }
@@ -463,7 +470,7 @@ namespace K3Log
                 newMacro.macroAction = e.Attribute("macroAction").Value;
                 newMacro.number = Convert.ToInt16(e.Value);
                 mlist.Add(newMacro);
-                Button thisButton = MacroButtons.Find(x => Convert.ToInt16(x.Tag) == newMacro.number);
+                System.Windows.Forms.Button thisButton = MacroButtons.Find(x => Convert.ToInt16(x.Tag) == newMacro.number);
                 thisButton.Text = newMacro.btnLabel;
             }
 
@@ -990,8 +997,11 @@ namespace K3Log
                         }
                         //FillView(LogdataGridView, txtCallsign.Text);
                         QRZFillIn();
-                        //logThisQ();  this caused cross thread 
-
+                        this.InvokeAndClose((MethodInvoker)delegate
+                        {
+                            logThisQ();  //this caused cross thread without InvokeAndClose
+                        }  
+                        );
                         break;
                     default:
                         break;
@@ -1073,6 +1083,7 @@ namespace K3Log
                         thisRadioMode = txtRadio2Mode;
                     }
                     double dFA = e.FA / 1000;
+                    double dFB = e.FB / 1000;
                     if (chkLink.Checked)
                     {
                         if (e.Radio_Num == 1 && radiobtnRadio2.Checked)
@@ -1111,6 +1122,7 @@ namespace K3Log
                     //SetTextBox(thisRadioBox, dFA.ToString("#.00"), false, Color.White);
                     thisRadioBox.Text = dFA.ToString("###.00");
                     thisRadioMode.Text = mode[e.MD];
+                    VFOB_Radio1.Text = dFB.ToString("###.00");
                     /*switch (e.MD)
                     {
                         case 1:
@@ -1200,6 +1212,9 @@ namespace K3Log
                     break;
                 case double n when (n < 450000 && n >= 420000):
                     band = 14;
+                    break;
+                case double n when (n < 1299000 && n >= 1290000):
+                    band = 15;
                     break;
 
             }
@@ -1618,7 +1633,7 @@ namespace K3Log
         }
 
         //private delegate void newSetComboBox(ComboBox cbo, Int16 value);
-        public void SetComboBox(ComboBox cbo, Int16 value)
+        public void SetComboBox(System.Windows.Forms.ComboBox cbo, Int16 value)
         {
 
             /*if (cbo.InvokeRequired)
@@ -1690,7 +1705,7 @@ namespace K3Log
 
         }
         //private delegate void newSetButtonCallback(Button btn, Color color);
-        public void SetButton(Button btn, Color color)
+        public void SetButton(System.Windows.Forms.Button btn, Color color)
         {
             /*if (btn.InvokeRequired)
             {
@@ -1734,7 +1749,7 @@ namespace K3Log
                 throw;
             }
         }
-        public void SetTextBox(TextBox textbox, string value, bool concat, Color color)
+        public void SetTextBox(System.Windows.Forms.TextBox textbox, string value, bool concat, Color color)
         {
             
             try
@@ -1970,6 +1985,7 @@ namespace K3Log
                     txtEndDate.Text = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ssZ");
 
                 }
+                
                 /*if (cboSubmode.Text.Contains("FT"))
                 {
                     if (cboProp.Text == "") cboProp.Text = "FT8";
@@ -2141,18 +2157,30 @@ namespace K3Log
             string adifFile = BrowseFiles();
             
             String adifIn = readADIF(adifFile);
+            bool LotwUpdate = false;
+            if (adifIn.Contains("ARRL Logbook of the World Status Report"))LotwUpdate = true;   
+
             AdifReader adifRead = new AdifReader(adifIn);
             // get all ADIF Rows from the read file
             List<AdifRow> rows =  adifRead.GetAdifRows();
             int i = 0;
             foreach (AdifRow r in rows)
             {
-                AdifToLog(r, i);
-                i++;
+                if(LotwUpdate)
+                {
+                    AdifToLog(r, i, true);
+                    i++;
+                }
+                else
+                {
+                    AdifToLog(r, i,false);
+                    i++;
+                }
+                
             }
         }
         
-        private void AdifToLog(AdifRow r, int adi_index)
+        private void AdifToLog(AdifRow r, int adi_index, bool lotwUpdate)
         {
             SQLiteCommand comm;
             string date_mask = "####-##-##";
@@ -2160,7 +2188,7 @@ namespace K3Log
             bool foundmatch = false;
 
             if (my_db.State == ConnectionState.Closed) my_db.Open();
-              
+            // fisrt use mask to normalize date and time to ##-##-#### ##:##:##Z  
             q.start = r.QSO_DATE.WithMask(date_mask) + " " + r.TIME_ON.WithMask(time_mask);
             if(r.QSO_DATE_OFF == null)
             {
@@ -2221,9 +2249,11 @@ namespace K3Log
                         var c = read.GetValue(read.GetOrdinal("callsign"));
                         var m = read.GetValue(read.GetOrdinal("mode"));
                         var b = read.GetValue(read.GetOrdinal("band"));
+                        var qd = read.GetValue(read.GetOrdinal("qsoid")).ToString();
                         if (ed == q.date)
                         {
                             foundmatch = true;
+                            q.qsoid = qd;
                             break;
                         }
                        
@@ -2237,36 +2267,57 @@ namespace K3Log
                 }
                 if (!foundmatch)
                 {
-                    q.qsoid = "import " + adi_index.ToString();
-                    q.logQso();
-                    bool remoteExists = false;
-                    foreach (Remotes lotw in LoTWLocations)
+                    if (!lotwUpdate)
                     {
-                        if(lotw.Station == q.mysiginfo)
+                        q.qsoid = "import " + adi_index.ToString();
+                        q.logQso();
+                        bool remoteExists = false;
+                        foreach (Remotes lotw in LoTWLocations)
                         {
-                            remoteExists = true;
-                            break;
+                            if (lotw.Station == q.mysiginfo)
+                            {
+                                remoteExists = true;
+                                break;
+                            }
+                        }
+                        if (!remoteExists)
+                        {
+                            Remotes newRemote = new Remotes();
+                            newRemote.Station = q.mysiginfo;
+                            newRemote.State = q.mystate;
+                            newRemote.County = q.mycnty;
+                            newRemote.CQZone = q.mycqzone.ToString();
+                            newRemote.ITUZone = q.myituzone.ToString();
+                            newRemote.Grid = q.mygridsquare;
+                            LoTWLocations.Add(newRemote);
+                            // add this new LoTW location to Remotes List
+                            string serializedList = Newtonsoft.Json.JsonConvert.SerializeObject(LoTWLocations);
+                            Properties.Settings.Default.LoTW = serializedList;
+                            Properties.Settings.Default.Save();
+                            cboLoTWStation.Items.Clear();
+                            // now update the dropdown
+                            foreach (Remotes rmt in LoTWLocations)
+                            {
+                                cboLoTWStation.Items.Add(rmt.Station);
+                            }
                         }
                     }
-                    if (!remoteExists)
+                    else
                     {
-                        Remotes newRemote = new Remotes();
-                        newRemote.Station = q.mysiginfo;
-                        newRemote.State = q.mystate;
-                        newRemote.County = q.mycnty;
-                        newRemote.CQZone = q.mycqzone.ToString();
-                        newRemote.ITUZone = q.myituzone.ToString();
-                        newRemote.Grid = q.mygridsquare;
-                        LoTWLocations.Add(newRemote);
-                        // add this new LoTW location to Remotes List
-                        string serializedList = Newtonsoft.Json.JsonConvert.SerializeObject(LoTWLocations);
-                        Properties.Settings.Default.LoTW = serializedList;
-                        Properties.Settings.Default.Save();
-                        cboLoTWStation.Items.Clear();
-                        // now update the dropdown
-                        foreach (Remotes rmt in LoTWLocations)
+                        Debug.Print("QSO Not Found");
+                    }
+                }
+                else  
+                {
+                    // found QSO in Log  Check for LoTW R
+                    if (lotwUpdate)
+                    {
+                        if(r.QSL_RCVD == "Y")
                         {
-                            cboLoTWStation.Items.Add(rmt.Station);
+                            //q.qsoid = "import " + adi_index.ToString();
+                            q.qsoconfirmations = "[{\"CT\":\"LOTW\",\"S\":\"Yes\",\"R\":\"Yes\",\"SV\":\"Electronic\",\"RV\":\"Electronic\",\"SD\":\""+r.QSLRDATE+"\"}]";
+                            //q.qsoconfirmations = "Yes";
+                            q.EditQso(q.qsoid);
                         }
                     }
                     
@@ -2631,6 +2682,8 @@ namespace K3Log
                     cboBand.Text = q.band;
                     cboRXBand.Text = q.bandrx;
                     cboMode.Text = q.mode;
+                    string qcfm = q.qsoconfirmations;
+                    chkLoTW.Checked = q.lotw_rcvd;
                     // if this is DATA mode, fill submode
                     foreach (string m in cboSubmode.Items)
                     {
@@ -2847,7 +2900,7 @@ namespace K3Log
                 string[] freqreslolve = { "137", "472", "1800", "3500", "5200", "7000", "10100", "14000", "18700", "21000", "24500", "28000", "50000", "144000", "222000", "432000", "1296000" };
                 txtFreq.Text = freqreslolve[cboBand.SelectedIndex];
             }
-
+            cboProp.SelectedIndex = -1;
             switch (cboBand.Text)
             {
                 case "630m":
@@ -2856,6 +2909,10 @@ namespace K3Log
                     break;
                 case "70cm":
                     SetTextBox(txtPower, "10", false, Color.White);
+                    break;
+                case "23cm":
+                    SetTextBox(txtPower, "200",false, Color.White);
+                    cboProp.SelectedIndex = 1;
                     break;
                 case "2m":
                     if (cboProp.Text == "SAT")
@@ -3012,7 +3069,7 @@ namespace K3Log
 
         private void BtnMacro0_Click(object sender, EventArgs e)
         {
-            BtnMacroEventHandler(Convert.ToInt32((sender as Button).Tag));
+            BtnMacroEventHandler(Convert.ToInt32((sender as System.Windows.Forms.Button).Tag));
                         
         }
 
@@ -3048,13 +3105,13 @@ namespace K3Log
 
                 MacroMsgs mac = new MacroMsgs();
                 mac.MacUpdate += new EventHandler<MacroMsgs.MacroButtonEventArgs>(MacroUpdated);
-                macro myMacro = macroList.Find(x => x.number == Convert.ToInt32((sender as Button).Tag));
+                macro myMacro = macroList.Find(x => x.number == Convert.ToInt32((sender as System.Windows.Forms.Button).Tag));
                 if (myMacro == null)
                 {
                     myMacro = new macro();
-                    myMacro.macroName = (sender as Button).Text;
-                    myMacro.btnLabel = (sender as Button).Text;
-                    myMacro.number = Convert.ToInt16((sender as Button).Tag);
+                    myMacro.macroName = (sender as System.Windows.Forms.Button).Text;
+                    myMacro.btnLabel = (sender as System.Windows.Forms.Button).Text;
+                    myMacro.number = Convert.ToInt16((sender as System.Windows.Forms.Button).Tag);
                     myMacro.macroShortCut = myMacro.number + 112;
                 }
                 mac.thisMacro = myMacro;
@@ -3088,7 +3145,7 @@ namespace K3Log
             WriteXML("macros.xml");
             foreach (macro m in macroList)
             {
-                Button btn = MacroButtons.Find(x => Convert.ToInt16(x.Tag) == m.number);
+                System.Windows.Forms.Button btn = MacroButtons.Find(x => Convert.ToInt16(x.Tag) == m.number);
                 if (btn != null) btn.Text = m.btnLabel;
             }
         }
@@ -3225,30 +3282,32 @@ namespace K3Log
             try
             {
                 DecodedGrids = new GridForm();
-                if (myWorkedGrids == null) 
-                {
-                    String[] tofind = { "gridSquare" };
-                    myWorkedGrids = GetWorked(tofind, "substr(gridsquare, 1, 4)");
-                }
-                List<String> gridsonly = new List<String>();
-                List<String> callsonly = new List<String>();
-                List<String> dateonly = new List<String>();
-                foreach (string grid in myWorkedGrids)
-                {
-                    gridsonly.Add(grid.Split(',')[0].Substring(0,4));
-                    callsonly.Add(grid.Split(',')[1]);
-                    dateonly.Add(grid.Split(',')[2]);
-                }
-                DecodedGrids.myWorkedGrids = gridsonly.Distinct().ToList();
-                DecodedGrids.myWorkedCallInGrid = callsonly;
-                DecodedGrids.myWorkedDateInGrid = dateonly;
-                DecodedGrids.Show();
             }
             catch (Exception)
             {
 
                 //throw;
             }
+            if (myWorkedGrids == null) 
+            {
+                String[] tofind = { "gridSquare" };
+                myWorkedGrids = GetWorked(tofind, "substr(gridsquare, 1, 4)");
+            }
+            List<String> gridsonly = new List<String>();
+            List<String> callsonly = new List<String>();
+            List<String> dateonly = new List<String>();
+            foreach (string grid in myWorkedGrids)
+            {
+                gridsonly.Add(grid.Split(',')[0].Substring(0,4));
+                callsonly.Add(grid.Split(',')[1]);
+                dateonly.Add(grid.Split(',')[2]);
+            }
+            DecodedGrids.myWorkedGrids = gridsonly;
+            DecodedGrids.myWorkedCallInGrid = callsonly;
+            DecodedGrids.myWorkedDateInGrid = dateonly;
+            DecodedGrids.Show();
+                
+            
             {
                 
                 

@@ -65,6 +65,7 @@ namespace K3Log
             public Int16 BNsub { get; set; }
             public String TB { get; set; }
             public Int16 MD { get; set; }
+            public Int16 MD_B { get; set; }
             public Int16 MDsub { get; set; }
             public String msg { get; set; }
             public int txBufcnt { get; set; }
@@ -172,11 +173,14 @@ namespace K3Log
         }
         private void timerTick(object sender, EventArgs e)
         {
-            int rigfreq = Rig.Freq;
+            int rigfreq = Rig.FreqA;
             args.FA = Convert.ToDouble(rigfreq);
             if(enableDoppler) DialFreq(Doppler, 1);
-
-            switch (Rig.Mode)
+            int rigfreqB = Rig.FreqB;
+            args.FB = Convert.ToDouble(rigfreqB);
+            args.MD = OmniModenum(Rig.Mode);
+            args.MD_B = OmniModenum(Rig.Mode);
+            /*switch (Rig.Mode)
             {
                 case (OmniRig.RigParamX)PM_SSB_L:
                     args.MD = 1;
@@ -206,9 +210,50 @@ namespace K3Log
                     args.MD = 0;
                     break;
 
+            }*/
+            if(args.FA != 0)
+            {
+                OnOmniRigData(this, args);  
             }
-            OnOmniRigData(this, args);  // event returned to calling form
+            
+            // event returned to calling form
             //Rig.Freq += 10;
+        }
+        private short OmniModenum(RigParamX m)
+        {
+            short md = 0;
+            switch (m)
+            {
+                case (OmniRig.RigParamX)PM_SSB_L:
+                    md = 1;
+                    break;
+                case (OmniRig.RigParamX)PM_SSB_U:
+                    md = 2;
+                    break;
+                case (OmniRig.RigParamX)PM_CW_U:
+                    md = 7;
+                    break;
+                case (OmniRig.RigParamX)PM_CW_L:
+                    md = 3;
+                    break;
+                case (OmniRig.RigParamX)PM_DIG_U:
+                    md = 8;
+                    break;
+                case (OmniRig.RigParamX)PM_DIG_L:
+                    md = 6;
+                    break;
+                case (OmniRig.RigParamX)PM_AM:
+                    md = 5;
+                    break;
+                case (OmniRig.RigParamX)PM_FM:
+                    md = 4;
+                    break;
+                default:
+                    md = 0;
+                    break;
+
+            }
+            return md;
         }
     }
 }

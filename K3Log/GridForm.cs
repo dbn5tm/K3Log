@@ -136,7 +136,7 @@ namespace K3Log
             loadFFMAGridsList();
             List<String> FFMAGridsWorked = new List<String>();  
             
-            foreach (string g in myWorkedGrids)
+            foreach (string g in myWorkedGrids.Distinct().ToList())
             {
                 if (FFMAGrids.Contains(g)) FFMAGridsWorked.Add(g);
             }
