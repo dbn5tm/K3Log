@@ -170,6 +170,12 @@
       <DependentUpon>GridToolTip.cs</DependentUpon>
     </Compile>
     <Compile Include="GripBounds.cs" />
+    <Compile Include="ImportADIF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportADIF.Designer.cs">
+      <DependentUpon>ImportADIF.cs</DependentUpon>
+    </Compile>
     <Compile Include="Log.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GridToolTip.resx">
       <DependentUpon>GridToolTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportADIF.resx">
+      <DependentUpon>ImportADIF.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Log.resx">
       <DependentUpon>Log.cs</DependentUpon>

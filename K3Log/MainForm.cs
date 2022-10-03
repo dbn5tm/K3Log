@@ -2154,6 +2154,11 @@ namespace K3Log
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ImportADIF Import = new ImportADIF(my_db);
+            Import.LoTWLocations = LoTWLocations;
+            Import.Show();
+            return;
+            /*
             string adifFile = BrowseFiles();
             
             String adifIn = readADIF(adifFile);
@@ -2177,10 +2182,10 @@ namespace K3Log
                     i++;
                 }
                 
-            }
+            }*/
         }
         
-        private void AdifToLog(AdifRow r, int adi_index, bool lotwUpdate)
+        /*private void AdifToLog(AdifRow r, int adi_index, bool lotwUpdate)
         {
             SQLiteCommand comm;
             string date_mask = "####-##-##";
@@ -2335,9 +2340,9 @@ namespace K3Log
             {
                 q.EditQso(q.qsoid);
             }
-            q.qsoid = "";*/
-        }
-        
+            q.qsoid = "";*//*
+        }*/
+        /*
         private string readADIF(string fspec)
         {
             if (fspec != "")
@@ -2354,7 +2359,7 @@ namespace K3Log
                 return adif;
             }
             return "";
-        }
+        }*/
 
         private void writeADIF(List<AdifRow> rows, string filespec)
         {
